@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables
+.env
+
+# Experiments
+experiments/results/*.csv
+experiments/results/*.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Kubernetes secrets
+k3s/secrets/
+
+# Logs
+*.log
