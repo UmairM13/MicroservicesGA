@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from fitness import evaluate_fitness
 
 app = FastAPI(title = "Fitness Service - Flight Scheduling", version="0.1.0")
@@ -16,6 +16,7 @@ class FlightInfo(BaseModel):
     passengers: int
 
 class FitnessRequest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     chromosomes: list[Chromosome]
     flights: list[FlightInfo]
     num_gates: int = Field(default=5)
