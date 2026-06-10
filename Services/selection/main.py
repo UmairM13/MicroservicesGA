@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from selection import tournament_select
+from typing import Any
 
 app = FastAPI(title = "Selection Service", version="0.1.0")
 
 class Chromosome(BaseModel):
-    genes: list[list[int]]
+    genes: Any
     fitness: float | None = None
 
 class SelectionRequest(BaseModel):
