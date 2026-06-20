@@ -4,10 +4,11 @@ from pydantic import BaseModel, Field
 from orchestrator import GAOrchestrator
 
 
-app = FastAPI(title="Island Orchestrator", version="1.0")
+app = FastAPI(title="Island Orchestrator", version="0.1.0")
 
 class RunRequest(BaseModel):
     context: dict
+    island_id: int = Field(default=0)
     population_size: int = Field(default=100)
     max_generations: int = Field(default=1000)
     elitism_count: int = Field(default=5)
@@ -15,6 +16,8 @@ class RunRequest(BaseModel):
     crossover_rate: float = Field(default=1.0)
     selection_rate: float = Field(default=0.85)
     tournament_size: int = Field(default=2)
+    migration_interval: int = Field(default=10)
+    num_migrants: int = Field(default=3)
 
 
 @app.get("/health")
@@ -26,17 +29,20 @@ def health():
 def run(request: RunRequest):
 
     orchestrator = GAOrchestrator(
-        # fitness_url=os.getenv("FITNESS_URL", "http://localhost:8001"),
-        # generator_url=os.getenv("GENERATOR_URL", "http://localhost:8002"),
-        # crossover_url=os.getenv("CROSSOVER_URL", "http://localhost:8003"),
-        # mutation_url=os.getenv("MUTATION_URL", "http://localhost:8004"),
-        fitness_url=os.getenv("FITNESS_URL", "http://localhost:8011"),
-        generator_url=os.getenv("GENERATOR_URL", "http://localhost:8012"),
-        crossover_url=os.getenv("CROSSOVER_URL", "http://localhost:8013"),
-        mutation_url=os.getenv("MUTATION_URL", "http://localhost:8014"),
-        
+        fitness_url=os.getenv("FITNESS_URL", "http://localhost:8001"),
+        generator_url=os.getenv("GENERATOR_URL", "http://localhost:8002"),
+        crossover_url=os.getenv("CROSSOVER_URL", "http://localhost:8003"),
+        mutation_url=os.getenv("MUTATION_URL", "http://localhost:8004"),
+        # fitness_url=os.getenv("FITNESS_URL", "http://localhost:8011"),
+        # generator_url=os.getenv("GENERATOR_URL", "http://localhost:8012"),
+        # crossover_url=os.getenv("CROSSOVER_URL", "http://localhost:8013"),
+        # mutation_url=os.getenv("MUTATION_URL", "http://localhost:8014"),
+
         selector_url=os.getenv("SELECTOR_URL", "http://localhost:8201"),
+        migration_url=os.getenv("MIGRATION_URL", None),
+
         context=request.context,
+        island_id=request.island_id,
         population_size=request.population_size,
         max_generations=request.max_generations,
         elitism_count=request.elitism_count,
@@ -44,6 +50,8 @@ def run(request: RunRequest):
         crossover_rate=request.crossover_rate,
         selection_rate=request.selection_rate,
         tournament_size=request.tournament_size,
+        migration_interval=request.migration_interval,
+        num_migrants=request.num_migrants
     )
 
     result = orchestrator.run()

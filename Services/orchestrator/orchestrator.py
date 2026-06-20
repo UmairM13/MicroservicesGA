@@ -13,6 +13,10 @@ class GAOrchestrator:
             crossover_url: str,
             mutation_url: str,
             context: dict,
+            island_id: int = 0,
+            migration_url: str | None = None,
+            migration_interval: int = 10,
+            num_migrants: int = 3,
             population_size: int = 100,
             max_generations: int = 1000,
             elitism_count: int = 5,
@@ -28,6 +32,11 @@ class GAOrchestrator:
         self.crossover_url = crossover_url
         self.mutation_url = mutation_url
         self.context = context
+
+        self.island_id = island_id
+        self.migration_url = migration_url
+        self.migration_interval = migration_interval
+        self.num_migrants = num_migrants
 
         self.population_size = population_size
         self.max_generations = max_generations
@@ -65,6 +74,11 @@ class GAOrchestrator:
                 if self.best_fitness == 1.0:
                     return self._summary("Solution Found" )
                 
+                ## Migration
+                if self.migration_url and gen > 0 and gen % self.migration_interval == 0:
+                    self._do_migration(client)
+            
+                
                 # preserves elites
                 elites = self.population[:self.elitism_count]
 
@@ -90,6 +104,40 @@ class GAOrchestrator:
 
         return self._summary("Max Generations Reached")
     
+
+    def _do_migration(self, client):
+        """Send best chromosomes out and recieve migrants from other islands."""
+        self.population.sort(key=lambda c: c['fitness'], reverse=True)
+        migrants = self.population[:self.num_migrants]
+
+        try: 
+            res = client.post(f"{self.migration_url}/send", json={
+                "source_island": self.island_id,
+                "migrants": migrants
+            })
+
+            res.raise_for_status()
+            print(f"Island {self.island_id} sent {len(migrants)} migrants to other islands.")
+
+        except Exception as e:
+            print(f"Failed to send migrants from island {self.island_id}: {e}")
+
+        try:
+            res = client.post(f"{self.migration_url}/receive?island_id={self.island_id}")
+            res.raise_for_status()
+            incoming = res.json()["migrants"]
+
+            if incoming:
+                self.population.sort(key=lambda c: c['fitness'], reverse=True)
+
+                for i, migrant in enumerate(incoming):
+                    replace_index = len(self.population) - 1 - i
+                    if replace_index > self.elitism_count: 
+                        self.population[replace_index] = migrant
+                print(f"Island {self.island_id} received {len(incoming)} migrants from other islands.")
+
+        except Exception as e:
+            print(f"Failed to receive migrants for island {self.island_id}: {e}")
 
     def _generate(self, client: httpx.Client) -> list[dict]:
         payload = {"chromosomes": self.population_size, **self.context}
