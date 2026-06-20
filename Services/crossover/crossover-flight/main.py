@@ -1,0 +1,38 @@
+from fastapi import FastAPI
+from pydantic import BaseModel, Field
+from crossover import crossover
+
+
+app = FastAPI(title="Crossover - Flight Service", version="0.1.0")
+
+
+class Chromosome(BaseModel):
+    genes: list[int]
+    fitness: float | None = None
+
+
+class CrossoverRequest(BaseModel):
+    parents: list[Chromosome]
+    crossover_rate: float = Field(default=0.8)
+
+
+class CrossoverResponse(BaseModel):
+    offspring: list[Chromosome]
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "message": "Crossover-flight service is healthy."}
+
+
+@app.post("/crossover", response_model=CrossoverResponse)
+def do_crossover(request: CrossoverRequest) -> CrossoverResponse:
+    offspring = []
+    for i in range(0, len(request.parents), 2):
+        if i + 1 < len(request.parents):
+            parent1 = request.parents[i].genes
+            parent2 = request.parents[i + 1].genes
+            child1, child2 = crossover(parent1, parent2, request.crossover_rate)
+            offspring.append(Chromosome(genes=child1))
+            offspring.append(Chromosome(genes=child2))
+    return CrossoverResponse(offspring=offspring)
