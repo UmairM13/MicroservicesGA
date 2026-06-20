@@ -12,6 +12,7 @@ class GAOrchestrator:
             selector_url: str,
             crossover_url: str,
             mutation_url: str,
+            context: dict,
             population_size: int = 100,
             max_generations: int = 1000,
             elitism_count: int = 5,
@@ -26,6 +27,8 @@ class GAOrchestrator:
         self.selector_url = selector_url
         self.crossover_url = crossover_url
         self.mutation_url = mutation_url
+        self.context = context
+
         self.population_size = population_size
         self.max_generations = max_generations
         self.elitism_count = elitism_count
@@ -35,14 +38,11 @@ class GAOrchestrator:
         self.tournament_size = tournament_size
 
         self.population = []
-        self.puzzle = []
         self.generation = 0
         self.best_fitness = 0.0
         self.history = []
 
-    def run( self, puzzle: list[list[int]]) -> dict:
-
-        self.puzzle = puzzle
+    def run( self) -> dict:
 
         with httpx.Client(timeout=60.0) as client:
 
@@ -92,22 +92,17 @@ class GAOrchestrator:
     
 
     def _generate(self, client: httpx.Client) -> list[dict]:
-        res = client.post(f"{self.generator_url}/generate", 
-                        json=
-                        {"puzzle": self.puzzle, 
-                        "population_size": self.population_size})
-        
+        payload = {"chromosomes": self.population_size, **self.context}
+        res = client.post(f"{self.generator_url}/generate", json=payload)
         res.raise_for_status()
         return res.json()['chromosomes']
 
 
     def _evaluate(self, client: httpx.Client, chromosomes: list[dict]) -> list[dict]:
-        res = client.post(f"{self.fitness_url}/evaluate", json={
-            "chromosomes": chromosomes,
-        })
-
+        payload = {"chromosomes": chromosomes, **self.context}
+        res = client.post(f"{self.fitness_url}/evaluate", json=payload)
         res.raise_for_status()
-        return res.json()['chromosomes']
+        return res.json()["chromosomes"]
     
     
     def _select(self, client: httpx.Client, num_parents: int) -> list[dict]:
@@ -118,6 +113,8 @@ class GAOrchestrator:
             "selection_rate": self.selection_rate,
         })
 
+        if res.status_code != 200:
+            print("SELECTION ERROR:", res.json())   
         res.raise_for_status()
         return res.json()['parents']
     
@@ -132,14 +129,14 @@ class GAOrchestrator:
         return res.json()['offspring']
     
     def _mutate(self, client: httpx.Client, chromosomes: list[dict]) -> list[dict]:
-        res = client.post(f"{self.mutation_url}/mutate", json={
+        payload = {
             "chromosomes": chromosomes,
-            "puzzle": self.puzzle,
             "mutation_rate": self.mutation_rate,
-        })
-
+            **self.context,
+        }
+        res = client.post(f"{self.mutation_url}/mutate", json=payload)
         res.raise_for_status()
-        return res.json()['mutated']
+        return res.json()["mutated"]
     
     def _is_stale(self, threshold: int = 100) -> bool:
         if len(self.history) < threshold:

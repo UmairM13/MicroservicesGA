@@ -7,7 +7,7 @@ from orchestrator import GAOrchestrator
 app = FastAPI(title="Island Orchestrator", version="1.0")
 
 class RunRequest(BaseModel):
-    puzzle: list[list[int]]
+    context: dict
     population_size: int = Field(default=100)
     max_generations: int = Field(default=1000)
     elitism_count: int = Field(default=5)
@@ -26,11 +26,17 @@ def health():
 def run(request: RunRequest):
 
     orchestrator = GAOrchestrator(
-        fitness_url=os.getenv("FITNESS_URL", "http://localhost:8001"),
-        generator_url=os.getenv("GENERATOR_URL", "http://localhost:8002"),
-        selector_url=os.getenv("SELECTOR_URL", "http://localhost:8003"),
-        crossover_url=os.getenv("CROSSOVER_URL", "http://localhost:8004"),
-        mutation_url=os.getenv("MUTATION_URL", "http://localhost:8005"),
+        # fitness_url=os.getenv("FITNESS_URL", "http://localhost:8001"),
+        # generator_url=os.getenv("GENERATOR_URL", "http://localhost:8002"),
+        # crossover_url=os.getenv("CROSSOVER_URL", "http://localhost:8003"),
+        # mutation_url=os.getenv("MUTATION_URL", "http://localhost:8004"),
+        fitness_url=os.getenv("FITNESS_URL", "http://localhost:8011"),
+        generator_url=os.getenv("GENERATOR_URL", "http://localhost:8012"),
+        crossover_url=os.getenv("CROSSOVER_URL", "http://localhost:8013"),
+        mutation_url=os.getenv("MUTATION_URL", "http://localhost:8014"),
+        
+        selector_url=os.getenv("SELECTOR_URL", "http://localhost:8201"),
+        context=request.context,
         population_size=request.population_size,
         max_generations=request.max_generations,
         elitism_count=request.elitism_count,
@@ -40,5 +46,5 @@ def run(request: RunRequest):
         tournament_size=request.tournament_size,
     )
 
-    result = orchestrator.run(request.puzzle)
+    result = orchestrator.run()
     return result
