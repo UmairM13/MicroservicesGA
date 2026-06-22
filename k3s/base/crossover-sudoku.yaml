@@ -1,48 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: migration
+  name: crossover-sudoku
   namespace: ga-pipeline
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: migration
+      app: crossover-sudoku
   template:
     metadata:
       labels:
-        app: migration
+        app: crossover-sudoku
     spec:
       containers:
-        - name: migration
-          image: migration
+        - name: crossover-sudoku
+          image: crossover-sudoku
           imagePullPolicy: Never
           ports:
             - containerPort: 8000
-          env:
-            - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "kafka:9092"
-            - name: NUM_ISLANDS
-              value: "4"
-            - name: MIGRATION_TOPOLOGY
-              value: "ring"
           readinessProbe:
             httpGet:
               path: /health
               port: 8000
-            initialDelaySeconds: 10
+            initialDelaySeconds: 5
             periodSeconds: 10
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: migration
+  name: crossover-sudoku
   namespace: ga-pipeline
 spec:
   selector:
-    app: migration
+    app: crossover-sudoku
   ports:
     - port: 8000
       targetPort: 8000
-      
