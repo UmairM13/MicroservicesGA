@@ -1,0 +1,137 @@
+
+services:
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker, controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      CLUSTER_ID: "ga-microservice-cluster-01"
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 10s
+      retries: 5
+      start_period: 15s
+
+  selection:
+    build: ./Services/selection
+    ports:
+      - "8201:8000"
+
+  migration:
+    build: ./Services/migration
+    ports:
+      - "8301:8000"
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      NUM_ISLANDS: "4"
+      MIGRATION_TOPOLOGY: ring
+    depends_on:
+      kafka:
+        condition: service_healthy
+
+  # SUDOKU
+
+  fitness-sudoku:
+    build: ./Services/fitness-sudoku
+    ports:
+      - "8001:8000"
+    profiles: ["sudoku"]
+
+  generator-sudoku:
+    build: ./Services/generator/generator-sudoku
+    ports:
+      - "8002:8000"
+    profiles: ["sudoku"]
+
+  crossover-sudoku:
+    build: ./Services/crossover/crossover-sudoku
+    ports:
+      - "8003:8000"
+    profiles: ["sudoku"]
+
+  mutation-sudoku:
+    build: ./Services/mutation/mutation-sudoku
+    ports:
+      - "8004:8000"
+    profiles: ["sudoku"]
+
+  orchestrator-sudoku:
+    build: ./Services/orchestrator
+    ports:
+      - "8202:8000"
+    environment:
+      FITNESS_URL: http://fitness-sudoku:8000
+      GENERATOR_URL: http://generator-sudoku:8000
+      CROSSOVER_URL: http://crossover-sudoku:8000
+      MUTATION_URL: http://mutation-sudoku:8000
+      SELECTOR_URL: http://selection:8000
+      MIGRATION_URL: http://migration:8000
+    depends_on:
+      - fitness-sudoku
+      - generator-sudoku
+      - crossover-sudoku
+      - mutation-sudoku
+      - selection
+      - migration
+    profiles: ["sudoku"]
+
+
+  ## Flight
+
+  fitness-flight:
+    build: ./Services/fitness-flight
+    ports:
+      - "8011:8000"
+    profiles: ["flight"]
+
+
+  generator-flight:
+    build: ./Services/generator/generator-flight
+    ports:
+      - "8012:8000"
+    profiles: ["flight"]
+
+
+  crossover-flight:
+    build: ./Services/crossover/crossover-flight
+    ports:
+      - "8013:8000"
+    profiles: ["flight"]
+
+  mutation-flight:
+    build: ./Services/mutation/mutation-flight
+    ports:
+      - "8014:8000"
+    profiles: ["flight"]
+
+  orchestrator-flight:
+    build: ./Services/orchestrator
+    ports:
+      - "8202:8000"
+    environment:
+      FITNESS_URL: http://fitness-flight:8000
+      GENERATOR_URL: http://generator-flight:8000
+      CROSSOVER_URL: http://crossover-flight:8000
+      MUTATION_URL: http://mutation-flight:8000
+      SELECTOR_URL: http://selection:8000
+      MIGRATION_URL: http://migration:8000
+    depends_on:
+      - fitness-flight
+      - generator-flight
+      - crossover-flight
+      - mutation-flight
+      - selection
+      - migration
+    profiles: ["flight"]
+
+
