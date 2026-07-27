@@ -1,11 +1,11 @@
 @echo off
+@echo off
 echo Stopping all services...
-taskkill /FI "WindowTitle eq fitness-*" /F 2>nul
-taskkill /FI "WindowTitle eq generator-*" /F 2>nul
-taskkill /FI "WindowTitle eq crossover-*" /F 2>nul
-taskkill /FI "WindowTitle eq mutation-*" /F 2>nul
-taskkill /FI "WindowTitle eq selection*" /F 2>nul
-taskkill /FI "WindowTitle eq orchestrator*" /F 2>nul
-taskkill /FI "WindowTitle eq migration*" /F 2>nul
 docker compose down
+
+for %%P in (8001 8002 8003 8004 8201 8202 8203 8204 8205 8301) do (
+    for /f "tokens=5" %%A in ('netstat -ano ^| findstr :%%P ^| findstr LISTENING') do (
+        taskkill /PID %%A /F 2>nul
+    )
+)
 echo All services stopped.
