@@ -22,14 +22,14 @@ def block_has_given(puzzle, row, col, value):
 
 
 
-def mutate(genes: list[list[int]], puzzle: list[list[int]], muatation_rate: float = 0.1) -> list[list[int]]:
+def mutate(genes: list[list[int]], puzzle: list[list[int]], rng: random.Random, muatation_rate: float = 0.1) -> list[list[int]]:
 
     """
     Mutate a chromosome by swapping two non-given values in a random row.
 
     Only swaps if it won't introduce column or block duplicates in the given cells. 
     """
-    if random.random() > muatation_rate:
+    if rng.random() > muatation_rate:
         return genes
     
     grid = [row[:] for row in genes]
@@ -37,8 +37,8 @@ def mutate(genes: list[list[int]], puzzle: list[list[int]], muatation_rate: floa
     attempts = 0
 
     while attempts < 100:
-        row = random.randint(0, Nd - 1)
-        col1, col2 = random.randint(0, Nd - 1), random.randint(0, Nd - 1)
+        row = rng.randint(0, Nd - 1)
+        col1, col2 = rng.randint(0, Nd - 1), rng.randint(0, Nd - 1)
 
         if col1 != col2 and puzzle[row][col1] == 0 and puzzle[row][col2] == 0:
 
@@ -84,7 +84,8 @@ if __name__ == "__main__":
         [8,1,9,5,2,4,6,7,3]
     ]
 
-    result = mutate(chromosome, puzzle, muatation_rate=1.0)
+    rng = random.Random(67)
+    result = mutate(chromosome, puzzle, rng,  muatation_rate=1.0)
     for i in range(Nd):
 
         if chromosome[i] != result[i]:

@@ -54,7 +54,7 @@ def cycle_crossover_rows(row1, row2):
     return child1, child2
 
 
-def crossover(parent1, parent2, crossover_rate=0.8):
+def crossover(parent1, parent2, rng: random.Random, crossover_rate=0.8):
     
     p1 = np.array(parent1, dtype=int)
     p2 = np.array(parent2, dtype=int)
@@ -62,10 +62,10 @@ def crossover(parent1, parent2, crossover_rate=0.8):
     child1 = p1.copy()
     child2 = p2.copy()
 
-    if random.random() < crossover_rate:
+    if rng.random() < crossover_rate:
 
-        point1 = random.randint(0, Nd - 2)
-        point2 = random.randint(point1 + 1, Nd - 1)
+        point1 = rng.randint(0, Nd - 2)
+        point2 = rng.randint(point1 + 1, Nd - 1)
 
         for i in range(point1, point2 + 1):
             child1[i], child2[i] = cycle_crossover_rows(p1[i], p2[i])
@@ -99,7 +99,8 @@ if __name__ == "__main__":
         [1,9,8,7,6,5,4,3,2]
     ]
 
-    c1, c2 = crossover(p1, p2, crossover_rate=1.0)
+    rng = random.Random(67)
+    c1, c2 = crossover(p1, p2, rng, crossover_rate=1.0)
 
     for i, row in enumerate(c1):
         valid = len(set(row)) == Nd

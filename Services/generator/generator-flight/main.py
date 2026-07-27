@@ -14,6 +14,7 @@ class GeneratorRequest(BaseModel):
     num_flights: int
     num_gates: int = Field(default=5)
     population_size: int = Field(default=100)
+    seed:int | None  = Field(default=None)
 
 
 class GeneratorResponse(BaseModel):
@@ -26,7 +27,8 @@ def health():
 
 @app.post("/generate", response_model=GeneratorResponse)
 def generate(request: GeneratorRequest) -> GeneratorResponse:
-    grids = generate_population(request.num_flights, request.num_gates, request.population_size)
+    grids = generate_population(request.num_flights, request.num_gates, request.population_size,
+                                seed=request.seed)
     chromosomes = [Chromosome(genes=grid) for grid in grids]
     return GeneratorResponse(chromosomes=chromosomes)
 

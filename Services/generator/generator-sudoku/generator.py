@@ -38,7 +38,7 @@ def build_helper(puzzle: list[list[int]]) -> list[list[list[int]]]:
     return helper
 
 
-def generate_chromosome(puzzle: list[list[int]], helper) -> list[list[int]]:
+def generate_chromosome(puzzle: list[list[int]], helper, rng:random.Random) -> list[list[int]]:
     """
     Generate a chromosome (candidate solution) for a given Sudoku puzzle, using the helper grid to fill in the empty cells with valid values.
     """
@@ -54,12 +54,12 @@ def generate_chromosome(puzzle: list[list[int]], helper) -> list[list[int]]:
             if given[i][j] != 0:
                 row[j] = int(given[i][j])
             else:
-                row[j] = random.choice(helper[i][j])
+                row[j] = rng.choice(helper[i][j])
 
         while len(set(row)) != Nd:
             for j in range(Nd):
                 if given[i][j] == 0:
-                    row[j] = random.choice(helper[i][j])
+                    row[j] = rng.choice(helper[i][j])
 
         grid[i] = row
 
@@ -67,13 +67,14 @@ def generate_chromosome(puzzle: list[list[int]], helper) -> list[list[int]]:
 
 
 
-def generate_population(puzzle: list[list[int]], size: int) -> list[list[list[int]]]:
+def generate_population(puzzle: list[list[int]], size: int, seed:int | None=None) -> list[list[list[int]]]:
     """
     Generate a full population of chromosomes
     """
 
     helper = build_helper(puzzle)
-    return [generate_chromosome(puzzle, helper) for _ in range(size)]
+    rng = random.Random(seed)
+    return [generate_chromosome(puzzle, helper, rng) for _ in range(size)]
 
 
 
@@ -90,7 +91,7 @@ if __name__ == "__main__":
         [0,1,0,0,2,0,0,7,0]
     ]
 
-    chromosomes = generate_population(puzzle, 5)
+    chromosomes = generate_population(puzzle, 5, seed=1)
 
     for i, chromosome in enumerate(chromosomes):
 

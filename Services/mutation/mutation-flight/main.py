@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from mutation import mutate
-
+import random
 
 app = FastAPI(title = "Mutation-flight Service", version="0.1.0")
 
@@ -15,6 +15,7 @@ class MutationRequest(BaseModel):
     chromosomes: list[Chromosome]
     num_gates: int = Field(default=5)
     mutation_rate: float = Field(default=0.06)
+    seed: int | None = Field(default=None)
 
 
 class MutationResponse(BaseModel):
@@ -29,8 +30,9 @@ def health():
 @app.post("/mutate", response_model=MutationResponse)
 def do_mutate(request: MutationRequest) -> MutationResponse:
     results = []
+    rng = random.Random(request.seed)
     for chromosome in request.chromosomes:
-        mutated_genes = mutate(chromosome.genes, request.num_gates, request.mutation_rate)
+        mutated_genes = mutate(chromosome.genes, request.num_gates, rng, request.mutation_rate)
         results.append(Chromosome(genes=mutated_genes))
     return MutationResponse(mutated=results)
 

@@ -3,6 +3,7 @@ import random
 def tournament_select(
         chromosomes: list[dict],
         num_parents: int,
+        rng: random.Random,
         tournament_size: int =2,
         selection_rate: float = 0.85
 ) -> list[dict]:
@@ -15,14 +16,14 @@ def tournament_select(
 
     for _ in range(num_parents):
 
-        competitors = random.sample(chromosomes, min(tournament_size, len(chromosomes)))
+        competitors = rng.sample(chromosomes, min(tournament_size, len(chromosomes)))
 
         competitors.sort(key=lambda x: x['fitness'], reverse=True)
 
-        if random.random() < selection_rate:
+        if rng.random() < selection_rate:
             parents.append(competitors[0])
         else:
-            parents.append(random.choice(competitors[1:]))
+            parents.append(rng.choice(competitors[1:]))
 
     return parents
 
@@ -37,7 +38,8 @@ if __name__ == "__main__":
         {"genes": [[4]], "fitness": 0.7},
     ]
 
-    parents = tournament_select(population, num_parents=2)
+    rng = random.Random(67)
+    parents = tournament_select(population, num_parents=2, rng=rng)
 
     for p in parents:
         print(f"Selected fitness: {p['fitness']}")

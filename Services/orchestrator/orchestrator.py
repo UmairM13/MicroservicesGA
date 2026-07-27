@@ -14,6 +14,7 @@ class GAOrchestrator:
             mutation_url: str,
             context: dict,
             island_id: int = 0,
+            base_seed: int | None = None,
             migration_url: str | None = None,
             migration_interval: int = 10,
             num_migrants: int = 3,
@@ -34,6 +35,8 @@ class GAOrchestrator:
         self.context = context
 
         self.island_id = island_id
+        self.base_seed = base_seed
+        self.island_seed = None if base_seed is None else base_seed + island_id
         self.migration_url = migration_url
         self.migration_interval = migration_interval
         self.num_migrants = num_migrants
@@ -140,7 +143,10 @@ class GAOrchestrator:
             print(f"Failed to receive migrants for island {self.island_id}: {e}")
 
     def _generate(self, client: httpx.Client) -> list[dict]:
-        payload = {"chromosomes": self.population_size, **self.context}
+        payload = {
+            "population_size": self.population_size, 
+            "seed": self.island_seed,
+            **self.context}
         res = client.post(f"{self.generator_url}/generate", json=payload)
         res.raise_for_status()
         return res.json()['chromosomes']
@@ -159,6 +165,7 @@ class GAOrchestrator:
             "num_parents": num_parents,
             "tournament_size": self.tournament_size,
             "selection_rate": self.selection_rate,
+            "seed": self._derive_seed("selection"),
         })
 
         if res.status_code != 200:
@@ -171,6 +178,7 @@ class GAOrchestrator:
         res = client.post(f"{self.crossover_url}/crossover", json={
             "parents": parents,
             "crossover_rate": self.crossover_rate,
+            "seed": self._derive_seed("crossover"),
         })
 
         res.raise_for_status()
@@ -180,6 +188,7 @@ class GAOrchestrator:
         payload = {
             "chromosomes": chromosomes,
             "mutation_rate": self.mutation_rate,
+            "seed": self._derive_seed("mutation"),
             **self.context,
         }
         res = client.post(f"{self.mutation_url}/mutate", json=payload)
@@ -201,3 +210,14 @@ class GAOrchestrator:
             "history": self.history,
             "best_solution": self.population[0] if self.population else None,
         }
+
+
+    def _derive_seed(self, tag: str) -> int | None:
+        """Derive a deterministic per-call seed from the island seed,
+        the current generation, and an operator tag. Returns None if
+        seeding is disabled (no base_seed provided)."""
+        if self.island_seed is None:
+            return None
+
+        tag_num = {"selection": 1, "crossover": 2, "mutation": 3, "reinit":4}[tag]
+        return (self.island_seed * 1_000_003 + self.generation * 1009 + tag_num) & 0x7FFFFFFF

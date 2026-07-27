@@ -7,6 +7,7 @@ app = FastAPI(title = "Generate Service", version="0.1.0")
 class GenerateRequest(BaseModel):
     puzzle: list[list[int]]
     population_size: int = Field(default=100)
+    seed:int | None  = Field(default=None)
 
 
 class Chromosome(BaseModel):
@@ -24,7 +25,7 @@ def health():
 
 @app.post("/generate", response_model=GenerateResponse)
 def generate(request: GenerateRequest) -> GenerateResponse: 
-    grids = generate_population(request.puzzle, request.population_size)
+    grids = generate_population(request.puzzle, request.population_size, seed=request.seed)
     chromosomes = [Chromosome(genes=grid) for grid in grids]
     return GenerateResponse(chromosomes=chromosomes)
 

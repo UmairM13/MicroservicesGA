@@ -9,6 +9,7 @@ app = FastAPI(title="Island Orchestrator", version="0.1.0")
 class RunRequest(BaseModel):
     context: dict
     island_id: int = Field(default=0)
+    base_seed: int | None = Field(default=None)
     population_size: int = Field(default=100)
     max_generations: int = Field(default=1000)
     elitism_count: int = Field(default=5)
@@ -43,6 +44,7 @@ def run(request: RunRequest):
 
         context=request.context,
         island_id=request.island_id,
+        base_seed=request.base_seed,
         population_size=request.population_size,
         max_generations=request.max_generations,
         elitism_count=request.elitism_count,

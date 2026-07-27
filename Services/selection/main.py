@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from selection import tournament_select
 from typing import Any
+import random
 
 app = FastAPI(title = "Selection Service", version="0.1.0")
 
@@ -14,6 +15,7 @@ class SelectionRequest(BaseModel):
     num_parents: int
     tournament_size: int = Field(default=2)
     selection_rate: float = Field(default=0.85)
+    seed: int | None = Field(default=None)
 
 
 class SelectionResponse(BaseModel):
@@ -28,9 +30,11 @@ def health():
 @app.post("/select", response_model=SelectionResponse)
 def select(request: SelectionRequest) -> SelectionResponse:
     chromosome_dicts = [c.model_dump() for c in request.chromosomes]
+    rng = random.Random(request.seed)
     selected = tournament_select(
         chromosome_dicts,
         num_parents=request.num_parents,
+        rng = rng,
         tournament_size=request.tournament_size,
         selection_rate=request.selection_rate
     )
