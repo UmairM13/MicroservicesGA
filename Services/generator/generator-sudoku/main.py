@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from generator import generate_population
+from typing import Any
 
 app = FastAPI(title = "Generate Service", version="0.1.0")
 
@@ -11,7 +12,7 @@ class GenerateRequest(BaseModel):
 
 
 class Chromosome(BaseModel):
-    genes: list[list[int]]
+    genes: Any
     fitness: float | None = None
 
 class GenerateResponse(BaseModel):

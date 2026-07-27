@@ -3,11 +3,12 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fitness import evaluate_fitness
+from typing import Any
 
 app = FastAPI(title = "Sudoku Fitness Evaluation Service", version="0.1.0")
 
 class Chromosome(BaseModel):
-    genes: list[list[int]]
+    genes: Any
     fitness: float | None = None
 
 

@@ -2,12 +2,13 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from mutation import mutate
 import random
+from typing import Any
 
 
 app = FastAPI(title = "Mutation Service", version="0.1.0")
 
 class Chromosome(BaseModel):
-    genes: list[list[int]]
+    genes: Any
     fitness: float | None = None
 
 

@@ -22,7 +22,8 @@ def block_has_given(puzzle, row, col, value):
 
 
 
-def mutate(genes: list[list[int]], puzzle: list[list[int]], rng: random.Random, muatation_rate: float = 0.1) -> list[list[int]]:
+def mutate(genes: list[list[int]], puzzle: list[list[int]], rng: random.Random, muatation_rate: float = 0.1,
+           max_swaps: int =5) -> list[list[int]]:
 
     """
     Mutate a chromosome by swapping two non-given values in a random row.
@@ -34,28 +35,34 @@ def mutate(genes: list[list[int]], puzzle: list[list[int]], rng: random.Random, 
     
     grid = [row[:] for row in genes]
 
-    attempts = 0
+    # Number of swaps scales with rate. At rate 0.06 -> 1 swap; at rate 0.5 -> ~5 swaps.
+    num_swaps = max(1, round(muatation_rate * max_swaps * 2))
 
+    for _ in range(num_swaps):
+        _attempt_one_swap(grid, puzzle, rng)
+
+    return grid
+
+
+def _attempt_one_swap(grid, puzzle, rng):
+    """Try up to 100 times to find one valid swap in a random row.
+    Mutates grid in place if a valid swap is found. Returns True if swapped."""
+    attempts = 0
     while attempts < 100:
         row = rng.randint(0, Nd - 1)
         col1, col2 = rng.randint(0, Nd - 1), rng.randint(0, Nd - 1)
 
         if col1 != col2 and puzzle[row][col1] == 0 and puzzle[row][col2] == 0:
-
-            if(not column_has_given(puzzle, col1, grid[row][col2]) and
-               not block_has_given(puzzle, row, col1, grid[row][col2]) and
-               not column_has_given(puzzle, col2, grid[row][col1]) and
-               not block_has_given(puzzle, row, col2, grid[row][col1])):
+            if (not column_has_given(puzzle, col1, grid[row][col2]) and
+                not block_has_given(puzzle, row, col1, grid[row][col2]) and
+                not column_has_given(puzzle, col2, grid[row][col1]) and
+                not block_has_given(puzzle, row, col2, grid[row][col1])):
 
                 grid[row][col1], grid[row][col2] = grid[row][col2], grid[row][col1]
-                return grid
-            
+                return True
 
         attempts += 1
-
-    return grid
-
-
+    return False
 
 
 if __name__ == "__main__":

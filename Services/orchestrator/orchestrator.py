@@ -25,6 +25,7 @@ class GAOrchestrator:
             crossover_rate: float = 1.0,
             selection_rate: float = 0.85,
             tournament_size: int = 2,
+            stale_threshold: int = 15,
     ):
         
         self.fitness_url = fitness_url
@@ -45,10 +46,13 @@ class GAOrchestrator:
         self.max_generations = max_generations
         self.elitism_count = elitism_count
         self.mutation_rate = mutation_rate
+        self.base_mutation_rate = mutation_rate
         self.crossover_rate = crossover_rate
         self.selection_rate = selection_rate
         self.tournament_size = tournament_size
+        self.stale_threshold = stale_threshold
 
+        self.last_reinit_gen = -1
         self.population = []
         self.generation = 0
         self.best_fitness = 0.0
@@ -72,7 +76,7 @@ class GAOrchestrator:
                 self.best_fitness = self.population[0]['fitness']
                 self.history.append(self.best_fitness)
 
-                print(f"Generation {gen}: Best Fitness = {self.best_fitness}")
+                print(f"Generation {gen}: Best Fitness = {self.best_fitness} (mut_rate={self.mutation_rate:.4f})")
 
                 if self.best_fitness == 1.0:
                     return self._summary("Solution Found" )
@@ -92,6 +96,9 @@ class GAOrchestrator:
                 # crossover
                 offspring = self._crossover(client, parents)
 
+                # adapt mutation rate based on recent improvement
+                self._adapt_mutation_rate(self.base_mutation_rate)
+
                 # mutation
                 offspring = self._mutate(client, offspring)
 
@@ -100,10 +107,15 @@ class GAOrchestrator:
 
                 self.population = elites + offspring
 
-                if self._is_stale():
+                if self._is_stale() and (self.generation - self.last_reinit_gen) >= self.stale_threshold:
                     print("Population stale - reinitializing")
-                    self.population = self._generate(client)
-                    self.population = self._evaluate(client, self.population)
+                    self.last_reinit_gen = self.generation
+                    self.population.sort(key=lambda c: c['fitness'], reverse=True)
+                    survivors = self.population[:self.elitism_count]
+                    fresh = self._generate(client, fresh=True)
+                    fresh = self._evaluate(client, fresh)
+
+                    self.population = survivors + fresh[:self.population_size - self.elitism_count]
 
         return self._summary("Max Generations Reached")
     
@@ -142,10 +154,12 @@ class GAOrchestrator:
         except Exception as e:
             print(f"Failed to receive migrants for island {self.island_id}: {e}")
 
-    def _generate(self, client: httpx.Client) -> list[dict]:
+    def _generate(self, client: httpx.Client, fresh:bool=False) -> list[dict]:
+        seed = self._derive_seed("reinit") if fresh else self.island_seed
+
         payload = {
             "population_size": self.population_size, 
-            "seed": self.island_seed,
+            "seed": seed,
             **self.context}
         res = client.post(f"{self.generator_url}/generate", json=payload)
         res.raise_for_status()
@@ -195,11 +209,11 @@ class GAOrchestrator:
         res.raise_for_status()
         return res.json()["mutated"]
     
-    def _is_stale(self, threshold: int = 100) -> bool:
-        if len(self.history) < threshold:
+    def _is_stale(self) -> bool:
+        if len(self.history) < self.stale_threshold:
             return False
         
-        recent_history = self.history[-threshold:]
+        recent_history = self.history[-self.stale_threshold:]
         return len(set(recent_history)) == 1
     
     def _summary(self, status: str) -> dict:
@@ -221,3 +235,35 @@ class GAOrchestrator:
 
         tag_num = {"selection": 1, "crossover": 2, "mutation": 3, "reinit":4}[tag]
         return (self.island_seed * 1_000_003 + self.generation * 1009 + tag_num) & 0x7FFFFFFF
+
+    def _improve_ratio(self, window:int=10) -> float:
+        """ Fraction of the last `window` generations that improved the best fitness."""
+
+        if len(self.history) < 2:
+            return 1.0 # No history, consider it improving
+        recent = self.history[-(window+1):]
+        improvements = sum(
+            1 for a, b in zip(recent, recent[1:]) if b > a
+        )
+
+        comparisons = len(recent) - 1
+        return improvements / comparisons if comparisons > 0 else 1.0
+
+    def _adapt_mutation_rate(
+            self, 
+            base_rate: float,
+            max_rate: float = 0.5,
+            window: int = 10,
+            up: float = 1.5,
+            down: float = 0.9,
+    ):
+        """ Stagnation triggered mutation control. When the search stalls, raise mutation to escape
+        local optima."""
+
+        ratio = self._improve_ratio(window)
+        if ratio < 0.2:
+            self.mutation_rate = min(self.mutation_rate * up, max_rate)
+        else:
+            self.mutation_rate = max(self.mutation_rate * down, base_rate)
+
+
