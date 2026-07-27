@@ -9,10 +9,10 @@ start "selection (8201)" cmd /k "cd Services\selection && uvicorn main:app --por
 
 timeout /t 3 /nobreak > nul
 
-set FITNESS_URL=http://localhost:8011
-set GENERATOR_URL=http://localhost:8012
-set CROSSOVER_URL=http://localhost:8013
-set MUTATION_URL=http://localhost:8014
-start "orchestrator (8202)" cmd /k "cd Services\orchestrator && set FITNESS_URL=http://localhost:8011 && set GENERATOR_URL=http://localhost:8012 && set CROSSOVER_URL=http://localhost:8013 && set MUTATION_URL=http://localhost:8014 && uvicorn main:app --port 8202"
+set FITNESS_URL=http://127.0.0.1:8011
+set GENERATOR_URL=http://127.0.0.1:8012
+set CROSSOVER_URL=http://127.0.0.1:8013
+set MUTATION_URL=http://127.0.0.1:8014
+start "orchestrator (8202)" cmd /k "cd Services\orchestrator && set FITNESS_URL=http://127.0.0.1:8011 && set GENERATOR_URL=http://127.0.0.1:8012 && set CROSSOVER_URL=http://127.0.0.1:8013 && set MUTATION_URL=http://127.0.0.1:8014 && uvicorn main:app --port 8202"
 
 echo All Flight services started.
