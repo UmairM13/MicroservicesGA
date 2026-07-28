@@ -13,5 +13,6 @@ set FITNESS_URL=http://127.0.0.1:8011
 set GENERATOR_URL=http://127.0.0.1:8012
 set CROSSOVER_URL=http://127.0.0.1:8013
 set MUTATION_URL=http://127.0.0.1:8014
+@REM start "orchestrator (8202)" cmd /k "cd Services\orchestrator && set FITNESS_URL=http://127.0.0.1:8011 && set GENERATOR_URL=http://127.0.0.1:8012 && set CROSSOVER_URL=http://127.0.0.1:8013 && set MUTATION_URL=http://127.0.0.1:8014 && uvicorn main:app --port 8202"
 
 echo All Flight services started.
