@@ -7,8 +7,8 @@ start "crossover-sudoku (8003)" cmd /k "cd Services\crossover\crossover-sudoku &
 start "mutation-sudoku (8004)" cmd /k "cd Services\mutation\mutation-sudoku && uvicorn main:app --port 8004"
 start "selection (8201)" cmd /k "cd Services\selection && uvicorn main:app --port 8201"
 
-timeout /t 3 /nobreak > nul
+@REM timeout /t 3 /nobreak > nul
 
-start "orchestrator (8202)" cmd /k "cd Services\orchestrator && uvicorn main:app --port 8202"
+@REM start "orchestrator (8202)" cmd /k "cd Services\orchestrator && uvicorn main:app --port 8202"
 
 echo All Sudoku services started.
