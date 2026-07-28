@@ -22,6 +22,8 @@ class Chromosome(BaseModel):
 class SendRequest(BaseModel):
     source_island: int
     migrants: list[Chromosome]
+    num_islands: int = 4
+    topology: str = "ring"
 
 
 class ReceiveResponse(BaseModel):
@@ -33,19 +35,19 @@ def health():
     return {"status": "ok", 
             "message": "Migration service is healthy.",
             "topology": manager.topology,
-            "num_islands": manager.num_islands}
+            "num_islands": manager.num_islands,
+            "topology": manager.topology,
+            }
 
 
 @app.post("/send")
 def send_migrants(request: SendRequest):
     migrant_dicts = [m.model_dump() for m in request.migrants]
-    targets = manager.send_migrants(request.source_island, migrant_dicts)
-    return {
-        "status": "ok", 
-        "source_island": request.source_island,
-        "targets": targets,
-        "num_migrants_sent": len(migrant_dicts)
-    }
+    targets = manager.send_migrants(request.source_island, migrant_dicts,
+                                    request.num_islands, request.topology)
+    print(f"[MIGRATION] island {request.source_island} (of {request.num_islands}, {request.topology}) -> targets {targets}")
+    return {"status": "ok", "source_island": request.source_island,
+            "targets": targets, "num_migrants_sent": len(migrant_dicts)}
 
 
 @app.post("/receive", response_model=ReceiveResponse)
@@ -56,3 +58,17 @@ def receive_migrants(island_id: int):
     )
 
 
+@app.post("/mark_solved")
+def mark_solved(island_id: int):
+    manager.mark_solved()
+    return {"status": "ok", "message": f"solved by {island_id} "}
+
+
+@app.get("/is_solved")
+def is_solved():
+    return {"solved": manager.is_solved()}
+
+@app.post("/reset")
+def reset():
+    manager.solved = False
+    return {"status": "reset"}

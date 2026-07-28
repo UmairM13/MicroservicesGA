@@ -22,10 +22,18 @@ class MigrationManager:
         self.bootstrap_servers = bootstrap_servers
         self.num_islands = num_islands
         self.topology = topology
+        self.solved = False
 
         self._ensure_topics()
 
 
+    def mark_solved(self):
+        self.solved = True
+
+    def is_solved(self) -> bool:
+        return self.solved
+
+    
     def _ensure_topics(self):
 
         """ Create per-island inbox topics if they don't exist."""
@@ -45,27 +53,19 @@ class MigrationManager:
                 if "TOPIC_ALREADY_EXISTS" not in str(e):
                     print(f"Failed to create topic {topic}: {e}")
 
-    def _get_targets(self, source_island: int) -> list[int]:
+    def _get_targets(self, source_island: int, num_islands: int, topology: str) -> list[int]:
+        """Determine target islands based on topology."""
+        if topology == "ring":
+            return [(source_island + 1) % num_islands]
+        elif topology == "fully_connected":
+            return [i for i in range(num_islands) if i != source_island]
+        else:
+            raise ValueError(f"Unknown topology: {topology}")
 
-        """ Determine target islands based on topology."""
-        if self.topology == "ring":
-            target = (source_island + 1) % self.num_islands
-            return [target]
-        
-        elif self.topology == "fully_connected":
-            return [i for i in range(self.num_islands) if i != source_island]
-        
-        else: 
-            raise ValueError(f"Unknown topology: {self.topology}")
-        
-    
 
-    def send_migrants(self, source_island: int, migrants: list[dict]):
-
-        """ Send migrants to its neighbours based on topology."""
-
+    def send_migrants(self, source_island: int, migrants: list[dict], num_islands: int, topology: str):
         producer = Producer({"bootstrap.servers": self.bootstrap_servers})
-        targets = self._get_targets(source_island)
+        targets = self._get_targets(source_island, num_islands, topology)
 
         for target in targets:
             message = json.dumps({
@@ -73,14 +73,13 @@ class MigrationManager:
                 "target_island": target,
                 "migrants": migrants
             })
-
             producer.produce(
-                topic= f"island_{target}_inbox",
+                topic=f"island_{target}_inbox",
                 value=message.encode("utf-8")
             )
 
-            producer.flush()
-            return targets
+        producer.flush()
+        return targets
         
 
     def receive_migrants(self, island_id: int, timeout: float = 2.0) -> list[dict]:
