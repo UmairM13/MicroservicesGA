@@ -10,6 +10,7 @@ class RunRequest(BaseModel):
     context: dict
     island_id: int = Field(default=0)
     base_seed: int | None = Field(default=None)
+    migration_url: str | None = Field(default=None)
     population_size: int = Field(default=100)
     max_generations: int = Field(default=1000)
     elitism_count: int = Field(default=5)
@@ -18,8 +19,11 @@ class RunRequest(BaseModel):
     selection_rate: float = Field(default=0.85)
     tournament_size: int = Field(default=2)
     stale_threshold: int = Field(default=15)
+    num_islands: int = Field(default=1)
     migration_interval: int = Field(default=10)
     num_migrants: int = Field(default=3)
+    topology: str = Field(default="ring")
+  
 
 
 @app.get("/health")
@@ -41,7 +45,7 @@ def run(request: RunRequest):
         # mutation_url=os.getenv("MUTATION_URL", "http://127.0.0.1:8014"),
 
         selector_url=os.getenv("SELECTOR_URL", "http://127.0.0.1:8201"),
-        migration_url=os.getenv("MIGRATION_URL", None),
+        migration_url=request.migration_url or os.getenv("MIGRATION_URL", None),
 
         context=request.context,
         island_id=request.island_id,
@@ -54,8 +58,10 @@ def run(request: RunRequest):
         selection_rate=request.selection_rate,
         tournament_size=request.tournament_size,
         stale_threshold=request.stale_threshold,
+        num_islands=request.num_islands,
         migration_interval=request.migration_interval,
-        num_migrants=request.num_migrants
+        num_migrants=request.num_migrants,
+        topology=request.topology
     )
 
     result = orchestrator.run()

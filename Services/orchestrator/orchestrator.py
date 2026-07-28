@@ -26,6 +26,8 @@ class GAOrchestrator:
             selection_rate: float = 0.85,
             tournament_size: int = 2,
             stale_threshold: int = 15,
+            num_islands: int = 1,
+            topology: str = "ring",
     ):
         
         self.fitness_url = fitness_url
@@ -53,10 +55,12 @@ class GAOrchestrator:
         self.stale_threshold = stale_threshold
 
         self.last_reinit_gen = -1
+        self.num_islands = num_islands
         self.population = []
         self.generation = 0
         self.best_fitness = 0.0
         self.history = []
+        self.topology = topology
 
     def run( self) -> dict:
 
@@ -79,10 +83,24 @@ class GAOrchestrator:
                 print(f"Generation {gen}: Best Fitness = {self.best_fitness} (mut_rate={self.mutation_rate:.4f})")
 
                 if self.best_fitness == 1.0:
+                    if self.migration_url:
+                        try:
+                            client.post(f"{self.migration_url}/mark_solved?island_id={self.island_id}")
+                            print(f"Island {self.island_id} marked solved on coordinator.")
+                        except Exception:
+                            pass
                     return self._summary("Solution Found" )
                 
                 ## Migration
                 if self.migration_url and gen > 0 and gen % self.migration_interval == 0:
+                    # check if another island already solved
+                    try:
+                        st = client.get(f"{self.migration_url}/is_solved").json()
+                        if st.get("solved"):
+                            print(f"Island {self.island_id} stopping — another island solved.")
+                            return self._summary("Stopped - Another Island Solved")
+                    except Exception as e:
+                        print(f"STATUS CHECK ERROR: {e}")
                     self._do_migration(client)
             
                 
@@ -128,7 +146,9 @@ class GAOrchestrator:
         try: 
             res = client.post(f"{self.migration_url}/send", json={
                 "source_island": self.island_id,
-                "migrants": migrants
+                "migrants": migrants,
+                "num_islands": self.num_islands,
+                "topology": self.topology
             })
 
             res.raise_for_status()
