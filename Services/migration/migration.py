@@ -15,7 +15,7 @@ class MigrationManager:
 
     def __init__(
             self,
-            bootstrap_servers: str = "localhost:9092",
+            bootstrap_servers: str = "127.0.0.1:9092",
             num_islands: int = 4,
             topology: str = "ring",
             ):

@@ -8,7 +8,7 @@ from migration import MigrationManager
 app = FastAPI(title="Migration Service", version="0.1.0")
 
 manager = MigrationManager(
-    bootstrap_servers = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092"),
+    bootstrap_servers = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "127.0.0.1:9092"),
     num_islands = int(os.getenv("NUM_ISLANDS", 4)),
     topology = os.getenv("TOPOLOGY", "ring")
 )
