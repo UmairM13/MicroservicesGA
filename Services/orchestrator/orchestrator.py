@@ -1,5 +1,5 @@
 import httpx 
-
+import time
 
 Nd = 9
 
@@ -109,19 +109,27 @@ class GAOrchestrator:
 
                 # select parents
                 num_parents = self.population_size - self.elitism_count
+                t = time.perf_counter()
                 parents = self._select(client, num_parents)
+                # print(f"  gen {gen} select    {time.perf_counter()-t:.3f}s")
 
                 # crossover
+                t = time.perf_counter()
                 offspring = self._crossover(client, parents)
+                # print(f"  gen {gen} crossover {time.perf_counter()-t:.3f}s")
 
                 # adapt mutation rate based on recent improvement
                 self._adapt_mutation_rate(self.base_mutation_rate)
 
                 # mutation
+                t = time.perf_counter()
                 offspring = self._mutate(client, offspring)
+                # print(f"  gen {gen} mutate    {time.perf_counter()-t:.3f}s")
 
                 # create new population
+                t = time.perf_counter()
                 offspring = self._evaluate(client, offspring)
+                # print(f"  gen {gen} evaluate  {time.perf_counter()-t:.3f}s")
 
                 self.population = elites + offspring
 
