@@ -7,12 +7,18 @@ def crossover(parent1: list[int], parent2: list[int], rng: random.Random, crosso
     """
 
     if rng.random() > crossover_rate:
-        return parent1, parent2
+        return parent1[:], parent2[:]
 
-    point = rng.randint(1, len(parent1) - 1)
+    child1 = []
+    child2 = []
 
-    child1 = parent1[:point] + parent2[point:]
-    child2 = parent2[:point] + parent1[point:]
+    for i in range(len(parent1)):
+        if rng.random() < 0.5:
+            child1.append(parent1[i])
+            child2.append(parent2[i])
+        else:
+            child1.append(parent2[i])
+            child2.append(parent1[i])
 
     return child1, child2
 

@@ -20,10 +20,6 @@ def evaluate_fitness( genes: list[int], flights: list[dict], num_gates: int) -> 
     for gate_id in range(num_gates):
         assigned = gate_flights[gate_id]
 
-        if len(assigned) == 0:
-            idle_penalty += 1
-            continue
-
         assigned.sort(key=lambda f: f['arrival'])
 
         for j in range(len(assigned) - 1):
@@ -46,8 +42,9 @@ def evaluate_fitness( genes: list[int], flights: list[dict], num_gates: int) -> 
     total_penalty = (conflict_penalty * 5) + (turnaround_penalty * 2) + idle_penalty
 
     fitness = 1 / (1 + total_penalty)
-    return fitness
 
+    # print(f"Fitness evaluation: genes={genes}, conflict_penalty={conflict_penalty:.2f}, turnaround_penalty={turnaround_penalty:.2f}, idle_penalty={idle_penalty:.2f}, total_penalty={total_penalty:.2f}, fitness={fitness:.4f}")
+    return fitness
 
 
 if __name__ == "__main__":
