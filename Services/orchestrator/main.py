@@ -23,6 +23,7 @@ class RunRequest(BaseModel):
     migration_interval: int = Field(default=10)
     num_migrants: int = Field(default=3)
     topology: str = Field(default="ring")
+    migration_rate: float = Field(default=0.05)
   
 
 
@@ -61,7 +62,8 @@ def run(request: RunRequest):
         num_islands=request.num_islands,
         migration_interval=request.migration_interval,
         num_migrants=request.num_migrants,
-        topology=request.topology
+        topology=request.topology,
+        migration_rate=request.migration_rate
     )
 
     result = orchestrator.run()

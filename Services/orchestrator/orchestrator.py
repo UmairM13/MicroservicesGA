@@ -28,6 +28,7 @@ class GAOrchestrator:
             stale_threshold: int = 15,
             num_islands: int = 1,
             topology: str = "ring",
+            migration_rate: float = 0.05
     ):
         
         self.fitness_url = fitness_url
@@ -61,6 +62,7 @@ class GAOrchestrator:
         self.best_fitness = 0.0
         self.history = []
         self.topology = topology
+        self.migration_rate = migration_rate
 
     def run( self) -> dict:
 
@@ -147,21 +149,20 @@ class GAOrchestrator:
     
 
     def _do_migration(self, client):
-        """Send best chromosomes out and recieve migrants from other islands."""
+        """Send best chromosomes out and receive migrants from other islands."""
         self.population.sort(key=lambda c: c['fitness'], reverse=True)
-        migrants = self.population[:self.num_migrants]
+        num_to_send = max(1, round(self.migration_rate * self.population_size))
+        migrants = self.population[:num_to_send]
 
-        try: 
+        try:
             res = client.post(f"{self.migration_url}/send", json={
                 "source_island": self.island_id,
                 "migrants": migrants,
                 "num_islands": self.num_islands,
                 "topology": self.topology
             })
-
             res.raise_for_status()
-            print(f"Island {self.island_id} sent {len(migrants)} migrants to other islands.")
-
+            print(f"Island {self.island_id} sent {len(migrants)} migrants.")
         except Exception as e:
             print(f"Failed to send migrants from island {self.island_id}: {e}")
 
@@ -171,14 +172,18 @@ class GAOrchestrator:
             incoming = res.json()["migrants"]
 
             if incoming:
-                self.population.sort(key=lambda c: c['fitness'], reverse=True)
+                # Cap absorbed migrants at the same proportion we send,
+                # so FC (many sources) doesn't flood the island. Keep the best.
+                incoming.sort(key=lambda c: c.get('fitness', 0) or 0, reverse=True)
+                max_absorb = max(1, round(self.migration_rate * self.population_size))
+                incoming = incoming[:max_absorb]
 
+                self.population.sort(key=lambda c: c['fitness'], reverse=True)
                 for i, migrant in enumerate(incoming):
                     replace_index = len(self.population) - 1 - i
-                    if replace_index > self.elitism_count: 
+                    if replace_index > self.elitism_count:
                         self.population[replace_index] = migrant
-                print(f"Island {self.island_id} received {len(incoming)} migrants from other islands.")
-
+                print(f"Island {self.island_id} absorbed {len(incoming)} migrants.")
         except Exception as e:
             print(f"Failed to receive migrants for island {self.island_id}: {e}")
 
