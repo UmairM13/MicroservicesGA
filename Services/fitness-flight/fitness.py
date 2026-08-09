@@ -3,49 +3,44 @@
 MIN_TURNAROUND = 45
 
 
-def evaluate_fitness( genes: list[int], flights: list[dict], num_gates: int) -> float:
-
-    conflict_penalty = 0
-    turnaround_penalty = 0
-    idle_penalty = 0
+def evaluate_fitness(genes: list[int], flights: list[dict], num_gates: int) -> float:
+    conflict_penalty = 0.0
+    turnaround_penalty = 0.0
+    idle_penalty = 0.0
 
     gate_flights = [[] for _ in range(num_gates)]
     for i, gate in enumerate(genes):
         if 0 <= gate < num_gates:
             gate_flights[gate].append(flights[i])
-        else: 
-            # invalid gate assignment, penalize heavily
-            conflict_penalty += 10
+        else:
+            conflict_penalty += 10  # invalid gate
 
     for gate_id in range(num_gates):
-        assigned = gate_flights[gate_id]
-
-        assigned.sort(key=lambda f: f['arrival'])
+        assigned = sorted(gate_flights[gate_id], key=lambda f: f["arrival"])
 
         for j in range(len(assigned) - 1):
             current = assigned[j]
             next_flight = assigned[j + 1]
+            gap = next_flight["arrival"] - current["departure"]
 
-            gap = next_flight['arrival'] - current['departure']
-
-            if gap < 0: 
+            if gap < 0:
                 overlap_minutes = abs(gap)
-                conflict_penalty += overlap_minutes / 60
-
+                conflict_penalty += overlap_minutes / 60.0
             elif gap < MIN_TURNAROUND:
                 shortfall = MIN_TURNAROUND - gap
-                turnaround_penalty += shortfall / 60
-
+                turnaround_penalty += shortfall / 60.0
             elif gap > 120:
-                idle_penalty  += (gap - 120) / 360
+                idle_penalty += (gap - 120) / 360.0
 
-    total_penalty = (conflict_penalty * 5) + (turnaround_penalty * 2) + idle_penalty
+    soft_penalty = (turnaround_penalty * 2) + idle_penalty
 
-    fitness = 1 / (1 + total_penalty)
+    # TIERED: conflicts dominate completely
+    if conflict_penalty > 0:
+        fitness = 0.1 / (1.0 + conflict_penalty)
+    else:
+        fitness = 0.1 + 0.9 / (1.0 + soft_penalty)
 
-    # print(f"Fitness evaluation: genes={genes}, conflict_penalty={conflict_penalty:.2f}, turnaround_penalty={turnaround_penalty:.2f}, idle_penalty={idle_penalty:.2f}, total_penalty={total_penalty:.2f}, fitness={fitness:.4f}")
     return fitness
-
 
 if __name__ == "__main__":
     from flight_data import generate_flight_data
