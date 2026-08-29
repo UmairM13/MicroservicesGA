@@ -21,6 +21,7 @@ class GAOrchestrator:
             population_size: int = 100,
             max_generations: int = 1000,
             elitism_count: int = 5,
+            elitism_rate: float | None = None,
             mutation_rate: float = 0.06,
             crossover_rate: float = 1.0,
             selection_rate: float = 0.85,
@@ -47,7 +48,12 @@ class GAOrchestrator:
 
         self.population_size = population_size
         self.max_generations = max_generations
-        self.elitism_count = elitism_count
+        if elitism_rate is not None:
+            self.elitism_count = max(1, round(elitism_rate * population_size))
+        else:
+            self.elitism_count = elitism_count
+
+        self.elitism_count = min(self.elitism_count, population_size - 2)
         self.mutation_rate = mutation_rate
         self.base_mutation_rate = mutation_rate
         self.crossover_rate = crossover_rate
