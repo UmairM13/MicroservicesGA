@@ -1,0 +1,146 @@
+num_islands,base_seed,island_id,population_mode,pop_per_island,best_fitness,generations,status,solved,config_best_fitness,config_solved,wall_clock_seconds,topology
+1,3,0,fixed_total,3200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,165.17,fully_connected
+1,67,0,fixed_total,3200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,165.08,fully_connected
+1,9,0,fixed_total,3200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,166.24,fully_connected
+1,12,0,fixed_total,3200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,163.74,fully_connected
+1,15,0,fixed_total,3200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,161.23,fully_connected
+4,3,0,fixed_total,800,1.0,20,Solution Found,True,1.0,True,31.81,fully_connected
+4,3,1,fixed_total,800,1.0,14,Solution Found,True,1.0,True,31.81,fully_connected
+4,3,2,fixed_total,800,0.8518518518518521,20,Stopped - Another Island Solved,False,1.0,True,31.81,fully_connected
+4,3,3,fixed_total,800,0.8518518518518521,20,Stopped - Another Island Solved,False,1.0,True,31.81,fully_connected
+4,67,0,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.8,fully_connected
+4,67,1,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.8,fully_connected
+4,67,2,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.8,fully_connected
+4,67,3,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.8,fully_connected
+4,9,0,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,181.08,fully_connected
+4,9,1,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,181.08,fully_connected
+4,9,2,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,181.08,fully_connected
+4,9,3,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,181.08,fully_connected
+4,12,0,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,170.65,fully_connected
+4,12,1,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,170.65,fully_connected
+4,12,2,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,170.65,fully_connected
+4,12,3,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,170.65,fully_connected
+4,15,0,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,165.6,fully_connected
+4,15,1,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,165.6,fully_connected
+4,15,2,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,165.6,fully_connected
+4,15,3,fixed_total,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,165.6,fully_connected
+8,3,0,fixed_total,400,1.0,18,Solution Found,True,1.0,True,38.38,fully_connected
+8,3,1,fixed_total,400,0.8518518518518521,30,Stopped - Another Island Solved,False,1.0,True,38.38,fully_connected
+8,3,2,fixed_total,400,1.0,27,Solution Found,True,1.0,True,38.38,fully_connected
+8,3,3,fixed_total,400,0.8518518518518521,30,Stopped - Another Island Solved,False,1.0,True,38.38,fully_connected
+8,3,4,fixed_total,400,0.8518518518518521,20,Stopped - Another Island Solved,False,1.0,True,38.38,fully_connected
+8,3,5,fixed_total,400,1.0,26,Solution Found,True,1.0,True,38.38,fully_connected
+8,3,6,fixed_total,400,0.8518518518518521,20,Stopped - Another Island Solved,False,1.0,True,38.38,fully_connected
+8,3,7,fixed_total,400,0.8518518518518521,20,Stopped - Another Island Solved,False,1.0,True,38.38,fully_connected
+8,67,0,fixed_total,400,1.0,23,Solution Found,True,1.0,True,41.3,fully_connected
+8,67,1,fixed_total,400,0.8518518518518521,30,Stopped - Another Island Solved,False,1.0,True,41.3,fully_connected
+8,67,2,fixed_total,400,0.8518518518518521,30,Stopped - Another Island Solved,False,1.0,True,41.3,fully_connected
+8,67,3,fixed_total,400,0.8518518518518521,30,Stopped - Another Island Solved,False,1.0,True,41.3,fully_connected
+8,67,4,fixed_total,400,0.8518518518518521,30,Stopped - Another Island Solved,False,1.0,True,41.3,fully_connected
+8,67,5,fixed_total,400,0.8518518518518521,30,Stopped - Another Island Solved,False,1.0,True,41.3,fully_connected
+8,67,6,fixed_total,400,0.8518518518518521,30,Stopped - Another Island Solved,False,1.0,True,41.3,fully_connected
+8,67,7,fixed_total,400,0.8518518518518521,30,Stopped - Another Island Solved,False,1.0,True,41.3,fully_connected
+8,9,0,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,152.35,fully_connected
+8,9,1,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,152.35,fully_connected
+8,9,2,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,152.35,fully_connected
+8,9,3,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,152.35,fully_connected
+8,9,4,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,152.35,fully_connected
+8,9,5,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,152.35,fully_connected
+8,9,6,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,152.35,fully_connected
+8,9,7,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,152.35,fully_connected
+8,12,0,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.17,fully_connected
+8,12,1,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.17,fully_connected
+8,12,2,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.17,fully_connected
+8,12,3,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.17,fully_connected
+8,12,4,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.17,fully_connected
+8,12,5,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.17,fully_connected
+8,12,6,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.17,fully_connected
+8,12,7,fixed_total,400,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.17,fully_connected
+8,15,0,fixed_total,400,1.0,34,Solution Found,True,1.0,True,64.69,fully_connected
+8,15,1,fixed_total,400,0.8518518518518521,40,Stopped - Another Island Solved,False,1.0,True,64.69,fully_connected
+8,15,2,fixed_total,400,0.8518518518518521,40,Stopped - Another Island Solved,False,1.0,True,64.69,fully_connected
+8,15,3,fixed_total,400,0.8518518518518521,40,Stopped - Another Island Solved,False,1.0,True,64.69,fully_connected
+8,15,4,fixed_total,400,0.8518518518518521,40,Stopped - Another Island Solved,False,1.0,True,64.69,fully_connected
+8,15,5,fixed_total,400,0.8518518518518521,30,Stopped - Another Island Solved,False,1.0,True,64.69,fully_connected
+8,15,6,fixed_total,400,0.8518518518518521,50,Stopped - Another Island Solved,False,1.0,True,64.69,fully_connected
+8,15,7,fixed_total,400,0.8518518518518521,40,Stopped - Another Island Solved,False,1.0,True,64.69,fully_connected
+16,3,0,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,1,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,2,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,3,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,4,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,5,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,6,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,7,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,8,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,9,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,10,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,11,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,12,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,13,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,14,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,3,15,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,172.57,fully_connected
+16,67,0,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,1,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,2,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,3,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,4,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,5,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,6,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,7,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,8,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,9,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,10,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,11,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,12,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,13,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,14,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,67,15,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.95,fully_connected
+16,9,0,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,1,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,2,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,3,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,4,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,5,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,6,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,7,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,8,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,9,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,10,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,11,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,12,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,13,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,14,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,9,15,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,164.49,fully_connected
+16,12,0,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,1,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,2,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,3,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,4,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,5,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,6,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,7,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,8,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,9,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,10,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,11,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,12,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,13,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,14,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,12,15,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,176.81,fully_connected
+16,15,0,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,1,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,2,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,3,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,4,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,5,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,6,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,7,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,8,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,9,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,10,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,11,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,12,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,13,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,14,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected
+16,15,15,fixed_total,200,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,173.92,fully_connected

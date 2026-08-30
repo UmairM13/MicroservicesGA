@@ -1,0 +1,16 @@
+num_islands,base_seed,island_id,population_mode,pop_per_island,best_fitness,generations,status,solved,config_best_fitness,config_solved,wall_clock_seconds
+1,1,0,fixed_per_island,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,52.78
+1,3,0,fixed_per_island,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,57.5
+1,67,0,fixed_per_island,800,1.0,27,Solution Found,True,1.0,True,12.37
+4,1,0,fixed_per_island,800,0.8518518518518521,99,Max Generations Reached,False,1.0,True,174.27
+4,1,1,fixed_per_island,800,0.8518518518518521,99,Max Generations Reached,False,1.0,True,174.27
+4,1,2,fixed_per_island,800,0.8518518518518521,99,Max Generations Reached,False,1.0,True,174.27
+4,1,3,fixed_per_island,800,1.0,19,Solution Found,True,1.0,True,174.27
+4,3,0,fixed_per_island,800,0.8518518518518521,99,Max Generations Reached,False,1.0,True,179.38
+4,3,1,fixed_per_island,800,1.0,19,Solution Found,True,1.0,True,179.38
+4,3,2,fixed_per_island,800,0.8518518518518521,99,Max Generations Reached,False,1.0,True,179.38
+4,3,3,fixed_per_island,800,0.8518518518518521,99,Max Generations Reached,False,1.0,True,179.38
+4,67,0,fixed_per_island,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,189.22
+4,67,1,fixed_per_island,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,189.22
+4,67,2,fixed_per_island,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,189.22
+4,67,3,fixed_per_island,800,0.8518518518518521,99,Max Generations Reached,False,0.8518518518518521,False,189.22
