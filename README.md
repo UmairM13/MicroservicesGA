@@ -247,7 +247,8 @@ Two things to watch:
 
 | Script | Purpose |
 |---|---|
-| `ga_results.py` | Summary statistics, significance tests and figures from `results.csv` |
+| `analyse_sudoku.py` | Summary statistics, significance tests and figures from `results.csv` |
+| `analyse_flight.py` | Summary statistics, significance tests and figures from `results.csv` |
 | `cloud_metrics.py` | Pulls per-pod CPU, memory and network from Prometheus for each run window |
 
 Requires a port-forward to Prometheus:
