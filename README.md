@@ -57,6 +57,11 @@ python config/config.py
 
 ```
 
+```bash
+./stop_all.bat
+```
+This stops all the consoles and kills the processes.
+
 Experiment parameters (island counts, seeds, population budget, topology) are set
 in the config block at the top of each runner script.
 
