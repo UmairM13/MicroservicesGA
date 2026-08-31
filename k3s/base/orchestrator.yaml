@@ -46,10 +46,9 @@ metadata:
   name: orchestrator
   namespace: ga-pipeline
 spec:
-  type: NodePort
+  clusterIP: None
   selector:
     app: orchestrator
   ports:
     - port: 8000
       targetPort: 8000
-      nodePort: 30000

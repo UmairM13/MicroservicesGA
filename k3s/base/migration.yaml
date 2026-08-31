@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: migration
-          image: migration
-          imagePullPolicy: Never
+          image: umair121/migration:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
           env:
@@ -27,11 +27,11 @@ spec:
             - name: MIGRATION_TOPOLOGY
               value: "ring"
           readinessProbe:
-            httpGet:
-              path: /health
-              port: 8000
-            initialDelaySeconds: 10
-            periodSeconds: 10
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
 
 ---
 apiVersion: v1
@@ -45,4 +45,3 @@ spec:
   ports:
     - port: 8000
       targetPort: 8000
-      
