@@ -8,8 +8,6 @@ locates the stable plateaus itself.
 Prerequisites:
     kubectl -n monitoring port-forward svc/kube-prometheus-stack-prometheus 9090:9090
 
-Edit CONFIG, then:
-    python cloud_auto.py
 """
 
 from pathlib import Path
@@ -21,19 +19,22 @@ import pandas as pd
 
 PROM = "http://localhost:9090"
 NAMESPACE = "ga-pipeline"
-STEP = "15s"                 # resolution for plateau detection
-TZ_OFFSET_HOURS = 1          # your local offset from UTC
+STEP = "15s"    
+# your local offset from UTC            
+TZ_OFFSET_HOURS = 1          
 
-# Broad period to search. Local wall-clock, generous margins.
+# Broad period to search. Local wall-clock.
 SEARCH_START = "2026-08-16 11:00:00"
 SEARCH_END   = "2026-08-16 15:15:43"
 
-BUDGET_LABEL = 1600          # just used for labelling the output
+# just used for labelling the output
+BUDGET_LABEL = 1600          
 TOPOLOGY = "ring"
 
-VALID_COUNTS = {1, 4, 8, 16}   # island counts you actually ran
-MIN_PLATEAU_S = 240            # ignore plateaus shorter than this
-TRIM_S = 60                    # seconds trimmed off each end of a plateau
+# island counts actually ran
+VALID_COUNTS = {1, 4, 8, 16}   
+MIN_PLATEAU_S = 240            
+TRIM_S = 60                    
 
 OUT_CSV = Path("cloud_metrics_auto.csv")
 
