@@ -38,12 +38,14 @@ PUZZLE = [
 
 ISLAND_COUNTS = [1, 4, 8, 16]
 SEEDS = [ 1, 2, 3, 4, 5, 67, 76, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-TOTAL_POPULATION = 3200
+TOTAL_POPULATION = 1600
 MAX_GENERATIONS = 100
 MIGRATION_INTERVAL = 10
 NUM_MIGRANTS = 3
 STALE_THRESHOLD = 20
 POPULATION_MODES = ["fixed_total"]
+MIGRATION_RATE = 0.05
+ELITISM_RATE = 0.05
 
 MIGRATION_URL = "http://127.0.0.1:8301"
 
@@ -76,19 +78,19 @@ def build_payload(island_id, num_islands, base_seed, population_mode):
         "base_seed": base_seed,
         "population_size": pop_per_island,
         "max_generations": MAX_GENERATIONS,
-        "elitism_count": 5,
+        "elitism_rate": ELITISM_RATE,
         "mutation_rate": 0.06,
         "crossover_rate": 1.0,
         "selection_rate": 0.85,
         "tournament_size": 2,
         "stale_threshold": STALE_THRESHOLD,
         "migration_interval": MIGRATION_INTERVAL,
-        "num_migrants": NUM_MIGRANTS
     }
     if num_islands > 1: 
         payload["migration_url"] = MIGRATION_URL
         payload["num_islands"] = num_islands
         payload["topology"] = TOPOLOGY
+        payload["migration_rate"] = MIGRATION_RATE
     return payload
 
 
