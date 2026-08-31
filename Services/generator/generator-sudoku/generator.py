@@ -1,3 +1,24 @@
+"""
+Sudoku population generator: constraint-aware backtracking construction.
+
+The idea of a per-cell "helper" board listing values legal against the given
+cells is drawn from a genetic algorithm implementation by Christian T. Jacobs,
+originally produced as coursework for the CS3M6 Evolutionary Computation module
+at the University of Reading (Copyright (c) 2009, 2017 Christian Thomas Jacobs).
+Original: https://github.com/ctjacobs/sudoku-genetic-algorithm
+
+The construction here is substantially reworked for this project by Umair
+Mangera (2026). Jacobs' generator fills each row by random selection from the
+helper candidates and retries the whole row when the result is not a valid
+permutation, which is slow and sensitive to puzzle difficulty. This version
+instead fills each row by backtracking over its empty cells, ordering them by
+fewest candidates first so failures are detected early, which produces a
+row-valid chromosome at predictable cost regardless of difficulty. The
+functions are stateless and take an injected random.Random so a population is
+reproducible from its seed, allowing the generator to run as an independent
+microservice.
+"""
+
 import numpy as np
 import random
 
@@ -34,7 +55,7 @@ def _fill_row(given_row, helper_row, empty_cols, rng):
     """Assign a value to each empty cell so the row is a permutation of 1-9,
     each value drawn from that cell's helper candidates. Backtracking over
     empty cells. Returns the completed row as a list, or None if impossible."""
-    row = list(given_row)                      # givens already in place, empties are 0
+    row = list(given_row)                      
     used = set(v for v in row if v != 0)
 
     # order empty cells by fewest candidates first (fail fast, less backtracking)
@@ -45,7 +66,8 @@ def _fill_row(given_row, helper_row, empty_cols, rng):
             return True
         col = order[k]
         cands = [v for v in helper_row[col] if v not in used]
-        rng.shuffle(cands)                     # randomness -> diverse population
+        # randomness to diversify population
+        rng.shuffle(cands)                     
         for v in cands:
             row[col] = v
             used.add(v)
@@ -65,7 +87,7 @@ def generate_chromosome(given, helper, rng):
         empty_cols = [j for j in range(Nd) if given[i][j] == 0]
         filled = _fill_row(given_row, helper[i], empty_cols, rng)
         if filled is None:
-            # extremely rare fallback: row has no constraint-valid permutation;
+            # fallback: row has no constraint-valid permutation;
             # fall back to a plain valid-permutation fill (row-unique only)
             used = set(v for v in given_row if v != 0)
             missing = [d for d in range(1, 10) if d not in used]

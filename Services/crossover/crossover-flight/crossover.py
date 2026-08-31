@@ -3,7 +3,20 @@ import random
 
 def crossover(parent1: list[int], parent2: list[int], rng: random.Random, crossover_rate: float = 0.8) -> tuple[list[int], list[int]]:
     """
-    Perform crossover between two parent chromosomes to produce two offspring chromosomes. Crossover is done by randomly selecting a crossover point and swapping the genes after that point between the two parents.
+     Two-point crossover for the flight-gate encoding.
+
+    Each chromosome is a flat list where position i holds the gate assigned
+    to flight i. Two cut points are chosen and the segment between them is
+    exchanged between the parents, so each child keeps the outer segments of
+    one parent and the middle segment of the other.
+
+    Two-point crossover is used rather than uniform crossover because gate
+    assignments are interdependent: a uniform operator that recombines
+    positions independently was found to break the coordinated groupings that
+    make a schedule conflict-free. Preserving contiguous segments keeps those
+    groupings largely intact. With probability (1 - crossover_rate) the
+    parents are returned unchanged, so recombination remains a genuine but
+    limited part of the search.
     """
 
     if rng.random() > crossover_rate:

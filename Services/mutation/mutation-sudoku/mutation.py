@@ -1,3 +1,23 @@
+"""
+Sudoku mutation: constraint-preserving swap within a row.
+
+Adapted from a genetic algorithm implementation by Christian T. Jacobs,
+originally produced as coursework for the CS3M6 Evolutionary Computation
+module at the University of Reading (Copyright (c) 2009, 2017 Christian
+Thomas Jacobs). Original: https://github.com/ctjacobs/sudoku-genetic-algorithm
+
+The swap-within-a-row strategy, and the check that a swap introduces no
+column or block conflict against the given cells, follow Jacobs'
+implementation. Adapted for this project by Umair Mangera (2026):
+re-implemented as stateless functions over plain lists rather than a method
+on a Candidate object, so the operator can run as an independent microservice;
+an explicit random.Random instance is injected so a run is reproducible from
+its seed; the unbounded retry loop of the original is replaced with a bounded
+100-attempt limit so a heavily constrained row cannot stall the service; and
+the number of swaps is scaled with the mutation rate rather than performing a
+single swap.
+"""
+
 import random
 
 Nd = 9
